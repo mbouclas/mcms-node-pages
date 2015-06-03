@@ -1,0 +1,43 @@
+{
+  "name" : "mcms-node-pages",
+  "package" : "mcms-node-pages",
+  "modules" : [
+    "mcms.pages"
+  ],
+  "devFiles" : {
+    "js" : [
+      "assets/build/js/mcms-node-pages-dev.js"
+    ],
+    "css" : [
+      "build/css/mcms-node-pages-dev.css"
+    ]
+  },
+  "files" : {
+    "js" : [
+      "assets/build/js/mcms-node-pages-dev.js"
+    ],
+    "css" : [
+      "build/css/mcms-node-pages-dev.css"
+    ]
+  },
+  "menus" : [
+    {
+      "title" : "Content Pages",
+      "href" : "content",
+      "items" : [
+        {
+          "title" : "Pages",
+          "href" : "pages"
+        },
+        {
+          "title" : "Categories",
+          "href" : "pages/categories"
+        },
+        {
+          "title" : "Settings",
+          "href" : "pages/settings"
+        }
+      ]
+    }
+  ]
+}

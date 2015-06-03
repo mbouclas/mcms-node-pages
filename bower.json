@@ -1,0 +1,10 @@
+{
+  "name": "mcms-node-pages",
+  "version": "0.0.1",
+  "description": "Pages plugin for the mcms-node-amdin",
+  "homepage": "https://github.com/mbouclas/mcms-node-pages/",
+  "license": "MIT",
+  "dependencies": {
+    "moment": "~2.9.0"
+  }
+}
