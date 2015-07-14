@@ -1,6 +1,6 @@
 module.exports = function() {
     var client = './public/';
-    var clientApp = client + 'app/';
+    var clientApp = client + 'pages.app/';
     var assetsDir = client + 'assets/';
     var report = './report/';
     var root = './';

@@ -1,12 +1,13 @@
 module.exports = (function(App,Connection,Package,privateMethods){
-    var eagerLoader = require('mcms-node-eager-loader')(),
-        Loader = new eagerLoader();
+
     var async = require('async');
     var Model = Connection.models.Category;
     var Relationships = Package.modelRelationships;
     var lo = require('lodash');
 
     function find(catID,options,callback){
+        var eagerLoader = require('mcms-node-eager-loader')(),
+            Loader = new eagerLoader();
         var asyncObj = {},
             attach = [];
 

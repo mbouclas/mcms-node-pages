@@ -3,8 +3,9 @@ module.exports =  {
         as : 'categories',
         join : 'getPageCategories',
         onSource : 'id',
-        onDest : 'id',
+        onDest : '_id',
         inject : 'categories',
+        attachment : 'value',
         extraParams : {}
     },
     ExtraFields : {
@@ -25,7 +26,7 @@ module.exports =  {
         as : 'thumb',
         join : 'getPageThumb',
         onSource : 'id',
-        onDest : 'id',
+        onDest : '_id',
         inject : 'thumb',
         return : 'single'
     },

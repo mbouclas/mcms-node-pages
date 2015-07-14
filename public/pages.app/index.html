@@ -1,0 +1,23 @@
+<table class="table">
+    <tr>
+        <th>Title</th>
+        <th>Categories</th>
+        <th>Dated added</th>
+        <th>Status</th>
+    </tr>
+    <tr ng-repeat="page in VM.pages">
+        <td>
+            <a href="#/pages/edit/{{ page._id }}" ng-bind-html="page.title"></a>
+        </td>
+        <td>
+            <a href="" ng-click="VM.applyFilter(category)" ng-repeat="category in page.categories" ng-bind-html="category.category"></a>
+        </td>
+        <td>{{ page.created_at | moment }}</td>
+        <td>
+            <span class="label label-sm label-success" ng-if="page.active">Yes</span>
+            <span class="label label-sm label-danger" ng-if="!page.active">No</span>
+        </td>
+    </tr>
+</table>
+
+

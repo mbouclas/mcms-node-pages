@@ -6,7 +6,8 @@ module.exports = (function(App,Package){
             getPageImages : require('./Helpers/Private/getPageImages')(App,Connection,Package),
             getPageCategories : require('./Helpers/Private/getPageCategories')(App,Connection,Package),
             getPageRelated : require('./Helpers/Private/getPageRelated')(App,Connection,Package),
-            getPageExtraFields : require('./Helpers/Private/getPageExtraFields')(App,Connection,Package)
+            getPageExtraFields : require('./Helpers/Private/getPageExtraFields')(App,Connection,Package),
+            formatItem : require('./Helpers/Private/formatItem')(App,Connection,Package)
         };
 
 

@@ -1,0 +1,91 @@
+<form method="POST" role="form" ng-submit="VM.savePage()" name="pageForm">
+<div alert-message="VM.success">Saved...</div>
+
+	<legend>{{ VM.Page.title || 'New page' }}</legend>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-external-link-square"></i> General info
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" name="title" id="title" placeholder="title" ng-model="VM.Page.title"
+                               to-slug="VM.Page.permalink">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="permalink">Permalink</label>
+                        <input type="text" class="form-control" name="permalink" id="permalink"
+                               placeholder="permalink" ng-model="VM.Page.permalink">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Category</label>
+                        <recursive-select ng-model="VM.Page.category"
+                                          settings="{label:'category',value:'id',defaultOption:'Select one'}" tree="VM.categories"
+                                          ng-change="VM.categoriesChange(item)"
+                                          class="form-control"></recursive-select>
+                        <div class="spacer">
+                            <ul class="list-unstyled list-inline">
+                                <li ng-repeat="category in VM.Page.categories">
+                                    <a href="" class="btn btn-default"
+                                       ng-click="VM.removeCategoryFromModel(category)">{{ category.category }} <i class="fa fa-trash"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea ng-model="VM.Page.description" redactor="{{ VM.redactorConfig }}" cols="30" rows="10"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description long</label>
+                        <textarea ng-model="VM.Page.description_long" redactor="{{ VM.redactorConfig }}" cols="30" rows="10"></textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- END LEFT -->
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-external-link-square"></i> Publishing info
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select-box ng-model="VM.Page.active" class="form-control"></select-box>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-external-link-square"></i> Main image
+                </div>
+                <div class="panel-body">
+                    sdsd
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-external-link-square"></i> Settings
+                </div>
+                <div class="panel-body">
+                    sdsd
+                </div>
+            </div>
+        </div><!-- END RIGHT -->
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

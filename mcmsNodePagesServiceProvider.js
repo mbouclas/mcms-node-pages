@@ -7,6 +7,7 @@ module.exports = (function(App){
 
     function mcmsNodePagesServiceProvider(){
         this.packageName = 'mcmsNodePages';
+
         this.services = {};
         this.controllers = {};
         this.adminModule = __dirname + '/admin-package.json';

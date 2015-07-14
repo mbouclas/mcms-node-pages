@@ -9,14 +9,19 @@ module.exports = function (mongoose, modelName) {
         active: Boolean,
         created_at: {type : Date, default : Date.now},
         updated_at: {type : Date, default : Date.now},
-        uid: String,
+        uid: {},
         categories : [],
         extraFields : {},
         thumb :{},
-        mediaFiles : {},
+        mediaFiles : {
+            images : [],
+            documents : [],
+            videos : []
+        },
         related :[],
         translations : {},
-        preferences : {}
+        preferences : {},
+        settings : {}
     }, {
         strict: false,
         id : true

@@ -68,6 +68,7 @@ gulp.task('inject', [ 'styles','less', 'templatecache'], function() {
     var options = config.getWiredepDefaultOptions();
     var wiredep = require('wiredep').stream;
 
+
     return gulp
         .src(config.indexTemplate)
         .pipe($.inject(gulp.src(config.css)))
@@ -195,7 +196,7 @@ gulp.task('dev-debug', ['normalize'], function() {
 gulp.task('watch', function() {
     var filesToWatch = [
         config.indexTemplate,
-        config.build + 'app/**/*.js'
+        config.build + 'pages.app/**/*.js'
     ];
     gulp.watch(filesToWatch , ['dev']);
 });
@@ -203,7 +204,7 @@ gulp.task('watch', function() {
 gulp.task('watch-debug', function() {
     var filesToWatch = [
         config.indexTemplate,
-        config.build + 'app/**/*.js'
+        config.build + 'pages.app/**/*.js'
     ];
     gulp.watch(filesToWatch , ['customDev']);
 });

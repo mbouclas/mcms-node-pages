@@ -5,6 +5,6 @@ module.exports = (function(App,Express,Package){
     };
     Route.set(names);
     Express.use(Route.use);
-    Express.use('/api/page',[App.Auth.middleware.isAdmin],require('./routes/page')(App,Route));
+    Express.use('/admin/api/pages',[App.Auth.middleware.isAdmin],require('./routes/page')(App,Route,Package));
 
 });
