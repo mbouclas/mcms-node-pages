@@ -4,6 +4,7 @@ module.exports = (function(App,Route,Package){
     var Controllers = App.Controllers.mcmsNodePages,
         categoryServices = App.Services['mcmsNodePages'].Category;
 
+
     router.post('/find' ,function(req, res, next) {
         res.render('partials/index.html', { title: 'Admin', flash : req.flash() });
     });
@@ -14,6 +15,7 @@ module.exports = (function(App,Route,Package){
     router.post('/initPages' ,Controllers['Page/Page'].init);
     router.post('/create' ,Controllers['Page/Page'].create);
     router.post('/update' ,Controllers['Page/Page'].update);
+    router.post('/upload' ,Controllers['Page/Page'].upload);
 
     return router;
 });

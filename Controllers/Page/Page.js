@@ -4,6 +4,7 @@ module.exports = (function(App,Package){
         categoryServices = App.Services['mcmsNodePages'].Category,
         Cache = {};
 
+
     return {
         name : 'Page',
         nameSpace : 'Page',
@@ -11,7 +12,8 @@ module.exports = (function(App,Package){
         find : find,
         init : init,
         create : create,
-        update : update
+        update : update,
+        upload : upload
     };
 
     function init(req,res,next){
@@ -80,5 +82,10 @@ module.exports = (function(App,Package){
 
             res.send(result);
         });
+    }
+
+    function upload(req,res,next){
+        console.log(req.body);
+        res.send(req.files);
     }
 });

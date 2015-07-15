@@ -16,6 +16,7 @@
     "mcms-node-eager-loader": "0.0.8",
     "mcms-node-named-routes": "0.0.5",
     "mongoose-materialized": "^0.1.8",
+    "multer": "^0.1.8",
     "slug": "^0.9.1"
   },
   "devDependencies": {

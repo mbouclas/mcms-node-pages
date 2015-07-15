@@ -70,7 +70,13 @@
                     <i class="fa fa-external-link-square"></i> Main image
                 </div>
                 <div class="panel-body">
-                    sdsd
+                    <img ng-src="{{ VM.Page.thumb.copies.thumb.imageUrl || '/assets/img/no-image.png' }}" class="img-responsive" />
+                    <upload-box
+                            ng-model="VM.Page.thumb" config="VM.uploadConfig"
+                            ng-if="VM.Page.id" callback="VM.onUploadDone(file,response)"
+                            auto-start="true" progress-bar="true"
+                            accept-select="{{ VM.uploadOptions.acceptSelect }}"
+                            accept="{{ VM.uploadOptions.accept }}"></upload-box>
                 </div>
             </div>
 
