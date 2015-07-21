@@ -3,7 +3,7 @@ module.exports = (function(App,Connection,Package,privateMethods){
         lo = require('lodash'),
         async = require('async');
 
-    function create(id,data,callback){
+    function update(id,data,callback){
         var page = privateMethods.formatItem(data);
         if (!lo.isObject(page)){
             return callback(page);//error
@@ -13,11 +13,11 @@ module.exports = (function(App,Connection,Package,privateMethods){
             if (err) {
                 return callback(err);
             }
-
+            App.Event.emit('cache.reset.object',Package.packageName,id);
             callback(null, true);
         });
 
     }
 
-    return create;
+    return update;
 });

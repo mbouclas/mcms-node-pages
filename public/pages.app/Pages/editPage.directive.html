@@ -70,13 +70,40 @@
                     <i class="fa fa-external-link-square"></i> Main image
                 </div>
                 <div class="panel-body">
-                    <img ng-src="{{ VM.Page.thumb.copies.thumb.imageUrl || '/assets/img/no-image.png' }}" class="img-responsive" />
+                    <img ng-src="{{ VM.Page.thumb.copies.big_thumb.imageUrl || '/assets/img/no-image.png' }}" class="img-responsive" />
                     <upload-box
                             ng-model="VM.Page.thumb" config="VM.uploadConfig"
                             ng-if="VM.Page.id" callback="VM.onUploadDone(file,response)"
                             auto-start="true" progress-bar="true"
                             accept-select="{{ VM.uploadOptions.acceptSelect }}"
                             accept="{{ VM.uploadOptions.accept }}"></upload-box>
+
+
+                    <upload-box
+                            ng-model="VM.Page.mediaFiles.images" config="VM.uploadConfigMulti"
+                            ng-if="VM.Page.id" callback="VM.onUploadMultiDone(file,response)"
+                            auto-start="true" progress-bar="true" multiple="true"
+                            accept-select="{{ VM.uploadOptions.acceptSelect }}"
+                            accept="{{ VM.uploadOptions.accept }}"></upload-box>
+
+
+
+
+                    <ul as-sortable="VM.sortableOptions" ng-model="VM.Page.mediaFiles.images" class="list-unstyled ">
+                        <li ng-repeat="image in VM.Page.mediaFiles.images track by $index"
+                            as-sortable-item class="as-sortable-item" style="margin-bottom: 10px">
+                            <div as-sortable-item-handle class="as-sortable-item-handle">
+                                <div class="row">
+                                    <div class="col-md-3"><img ng-src="{{ image.thumb.imageUrl || '/assets/img/no-image.png' }}"/></div>
+                                    <div class="col-md-3"><input type="text" class="form-control" ng-model="image.alt" placeholder="alt"></div>
+                                    <div class="col-md-3"><input type="text" class="form-control" ng-model="image.title" placeholder="title"></div>
+                                    <div class="col-md-3"><select-box ng-model="image.active" class="form-control"></select-box></div>
+                                </div>
+
+                            </div>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
 

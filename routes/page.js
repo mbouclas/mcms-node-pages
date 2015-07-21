@@ -15,7 +15,8 @@ module.exports = (function(App,Route,Package){
     router.post('/initPages' ,Controllers['Page/Page'].init);
     router.post('/create' ,Controllers['Page/Page'].create);
     router.post('/update' ,Controllers['Page/Page'].update);
-    router.post('/upload' ,Controllers['Page/Page'].upload);
+    router.post('/uploadThumb' ,Controllers['Page/Page'].uploadThumb);
+    router.post('/uploadImage' ,Controllers['Page/Page'].uploadImage);
 
     return router;
 });

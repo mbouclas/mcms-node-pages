@@ -13,7 +13,8 @@ module.exports = (function(App,Package){
         init : init,
         create : create,
         update : update,
-        upload : upload
+        uploadThumb : uploadThumb,
+        uploadImage : uploadImage
     };
 
     function init(req,res,next){
@@ -84,8 +85,25 @@ module.exports = (function(App,Package){
         });
     }
 
-    function upload(req,res,next){
-        console.log(req.body);
-        res.send(req.files);
+    function uploadThumb(req,res,next){
+        pageServices.thumb(req.body.id,req.files.uploadedFile,function(err,result){
+            if (err){
+                return res.status(409).send({success:false, error : err});
+            }
+
+            res.send(result);
+        });
+
+    }
+
+    function uploadImage(req,res,next){
+        pageServices.image(req.body.id,req.files.uploadedFile,function(err,result){
+            if (err){
+                return res.status(409).send({success:false, error : err});
+            }
+
+            res.send(result);
+        });
+
     }
 });

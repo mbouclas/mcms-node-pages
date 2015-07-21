@@ -21,6 +21,8 @@ module.exports = (function(App,Package){
         create : require('./Helpers/create')(App,Connection,Package,privateMethods),
         delete : require('./Helpers/delete')(App,Connection,Package,privateMethods),
         update : require('./Helpers/update')(App,Connection,Package,privateMethods),
-        settings : require('./Helpers/settings')(App,Connection,Package,privateMethods)
+        settings : require('./Helpers/settings')(App,Connection,Package,privateMethods),
+        image : require('./Helpers/image')(App,Connection,Package,privateMethods),
+        thumb : require('./Helpers/thumb')(App,Connection,Package,privateMethods)
     };
 });

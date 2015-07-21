@@ -234,20 +234,43 @@
             copies : {
                 thumb : {}
             }
-        };
+        },
+            mediaFiles = {
+                images : [],
+                documents : []
+            };
         vm.categories = Page.Categories;
         vm.uploadOptions = BaseConfig.fileTypes.image;
+        vm.sortableOptions = {
+            containment: '#sortable-container',
+            orderChanged: function(event) {
+                recalculateOrderBy(vm.Page.mediaFiles.images);
+            }
+        };
+
         if ($routeParams.id){
             Page.get($routeParams.id).then(function(page){
                 vm.Page = page;
                 $rootScope.$broadcast('page.loaded',page);
-
                 vm.uploadConfig = {
-                    url : Config.apiUrl + 'upload',
+                    url : Config.apiUrl + 'uploadThumb',
                     fields : {
                         id : $routeParams.id
                     }
                 };
+
+                vm.uploadConfigMulti = {
+                    url : Config.apiUrl + 'uploadImage',
+                    fields : {
+                        id : $routeParams.id
+                    }
+                };
+            });
+        }
+
+        function recalculateOrderBy(arr){
+            angular.forEach(arr,function(item,i){
+                item.orderBy = i;
             });
         }
 
@@ -260,14 +283,18 @@
         });
 
         vm.onUploadDone = function(file,response){//handle the after upload shit
-            console.log(arguments);
             if (!vm.Page.thumb){
                 vm.Page.thumb = thumb;
             }
 
-            vm.Page.thumb.copies.thumb = {
-                imageUrl : response.uploadedFile.path
+            vm.Page.thumb = response;
+        };
+
+        vm.onUploadMultiDone = function(file,response){//handle the after upload shit
+            if (!vm.Page.mediaFiles){
+                vm.Page.mediaFiles = mediaFiles;
             }
+            vm.Page.mediaFiles.images.push(lo.merge({id : response.id},response.copies));
         };
 
         vm.categoriesChange = function(item){
@@ -301,18 +328,19 @@
     angular.module('mcms.pages')
         .controller('editPageCtrl',editPageCtrl);
 
-    editPageCtrl.$inject = ['$rootScope','logger','pageTitle','pages.pageService','$timeout'];
+    editPageCtrl.$inject = ['$rootScope','logger','pageTitle'];
 
-    function editPageCtrl($rootScope,logger,pageTitle,pageService,$timeout){
+    function editPageCtrl($rootScope,logger,pageTitle){
         var vm = this;
 
 
         $rootScope.$on('page.loaded',function(e,page){
+
             pageTitle.set({
                 pageTitle : page.title,
                 path : [
                     {
-                        href : 'admin/pages',
+                        href : 'pages',
                         title : 'Pages'
                     }
                 ]
@@ -320,7 +348,6 @@
         });
 
         pageTitle.set('Pages');
-
     }
 
 
