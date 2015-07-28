@@ -2,123 +2,29 @@
 <div alert-message="VM.success">Saved...</div>
 
 	<legend>{{ VM.Page.title || 'New page' }}</legend>
-    <div class="row">
-        <div class="col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-external-link-square"></i> General info
-                </div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" name="title" id="title" placeholder="title" ng-model="VM.Page.title"
-                               to-slug="VM.Page.permalink">
-                    </div>
+    <tabs>
+        <tab-button target="#panel_tab2_example1" state="general"><i class="green fa fa-home"></i> General</tab-button>
+        <tab-button target="#panel_tab2_example2" state="mediaFiles">Media Files</tab-button>
+        <tab-button target="#panel_tab2_example3" state="related">Related</tab-button>
+    </tabs>
+    <div class="tabbable">
+        <ul class="nav nav-tabs tab-bricky" id="myTab">
+            <tab-button target="#panel_tab2_example1" state="general"><i class="green fa fa-home"></i> General</tab-button>
+            <tab-button target="#panel_tab2_example2" state="mediaFiles">Media Files</tab-button>
+            <tab-button target="#panel_tab2_example3" state="related">Related</tab-button>
+        </ul>
+        <div class="tab-content">
+            <div id="panel_tab2_example1" class="tab-pane active">
+                <general-information></general-information>
+            </div><!-- END TAB -->
+            <div id="panel_tab2_example2" class="tab-pane">
+                <media-files></media-files>
+            </div><!-- END TAB -->
+            <div id="panel_tab2_example3" class="tab-pane">
+                <related-items></related-items>
+            </div><!-- END TAB -->
 
-                    <div class="form-group">
-                        <label for="permalink">Permalink</label>
-                        <input type="text" class="form-control" name="permalink" id="permalink"
-                               placeholder="permalink" ng-model="VM.Page.permalink">
-                    </div>
-
-
-                    <div class="form-group">
-                        <label>Category</label>
-                        <recursive-select ng-model="VM.Page.category"
-                                          settings="{label:'category',value:'id',defaultOption:'Select one'}" tree="VM.categories"
-                                          ng-change="VM.categoriesChange(item)"
-                                          class="form-control"></recursive-select>
-                        <div class="spacer">
-                            <ul class="list-unstyled list-inline">
-                                <li ng-repeat="category in VM.Page.categories">
-                                    <a href="" class="btn btn-default"
-                                       ng-click="VM.removeCategoryFromModel(category)">{{ category.category }} <i class="fa fa-trash"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea ng-model="VM.Page.description" redactor="{{ VM.redactorConfig }}" cols="30" rows="10"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Description long</label>
-                        <textarea ng-model="VM.Page.description_long" redactor="{{ VM.redactorConfig }}" cols="30" rows="10"></textarea>
-                    </div>
-                </div>
-            </div>
-
-        </div><!-- END LEFT -->
-        <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-external-link-square"></i> Publishing info
-                </div>
-                <div class="panel-body">
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select-box ng-model="VM.Page.active" class="form-control"></select-box>
-
-                    </div>
-
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-external-link-square"></i> Main image
-                </div>
-                <div class="panel-body">
-                    <img ng-src="{{ VM.Page.thumb.copies.big_thumb.imageUrl || '/assets/img/no-image.png' }}" class="img-responsive" />
-                    <upload-box
-                            ng-model="VM.Page.thumb" config="VM.uploadConfig"
-                            ng-if="VM.Page.id" callback="VM.onUploadDone(file,response)"
-                            auto-start="true" progress-bar="true"
-                            accept-select="{{ VM.uploadOptions.acceptSelect }}"
-                            accept="{{ VM.uploadOptions.accept }}"></upload-box>
-
-
-                    <upload-box
-                            ng-model="VM.Page.mediaFiles.images" config="VM.uploadConfigMulti"
-                            ng-if="VM.Page.id" callback="VM.onUploadMultiDone(file,response)"
-                            auto-start="true" progress-bar="true" multiple="true"
-                            accept-select="{{ VM.uploadOptions.acceptSelect }}"
-                            accept="{{ VM.uploadOptions.accept }}"></upload-box>
-
-
-
-
-                    <ul as-sortable="VM.sortableOptions" ng-model="VM.Page.mediaFiles.images" class="list-unstyled ">
-                        <li ng-repeat="image in VM.Page.mediaFiles.images track by $index"
-                            as-sortable-item class="as-sortable-item" style="margin-bottom: 10px">
-                            <div as-sortable-item-handle class="as-sortable-item-handle">
-                                <div class="row">
-                                    <div class="col-md-3"><img ng-src="{{ image.thumb.imageUrl || '/assets/img/no-image.png' }}"/></div>
-                                    <div class="col-md-3"><input type="text" class="form-control" ng-model="image.alt" placeholder="alt"></div>
-                                    <div class="col-md-3"><input type="text" class="form-control" ng-model="image.title" placeholder="title"></div>
-                                    <div class="col-md-3"><select-box ng-model="image.active" class="form-control"></select-box></div>
-                                </div>
-
-                            </div>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-external-link-square"></i> Settings
-                </div>
-                <div class="panel-body">
-                    sdsd
-                </div>
-            </div>
-        </div><!-- END RIGHT -->
+        </div>
     </div>
 
-
-
-    <button type="submit" class="btn btn-primary">Save</button>
 </form>

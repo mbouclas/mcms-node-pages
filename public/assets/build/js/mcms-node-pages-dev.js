@@ -229,50 +229,20 @@
 
     function editPageController(Page,$timeout,Config,$routeParams,$rootScope,lo,BaseConfig){
         var vm = this;
-        vm.redactorConfig = Config.redactor;
-        var thumb = {
-            copies : {
-                thumb : {}
-            }
-        },
-            mediaFiles = {
-                images : [],
-                documents : []
-            };
-        vm.categories = Page.Categories;
-        vm.uploadOptions = BaseConfig.fileTypes.image;
-        vm.sortableOptions = {
-            containment: '#sortable-container',
-            orderChanged: function(event) {
-                recalculateOrderBy(vm.Page.mediaFiles.images);
-            }
-        };
+
+
 
         if ($routeParams.id){
             Page.get($routeParams.id).then(function(page){
-                vm.Page = page;
+
                 $rootScope.$broadcast('page.loaded',page);
-                vm.uploadConfig = {
-                    url : Config.apiUrl + 'uploadThumb',
-                    fields : {
-                        id : $routeParams.id
-                    }
-                };
 
-                vm.uploadConfigMulti = {
-                    url : Config.apiUrl + 'uploadImage',
-                    fields : {
-                        id : $routeParams.id
-                    }
-                };
+                vm.Page = page;
+
             });
         }
 
-        function recalculateOrderBy(arr){
-            angular.forEach(arr,function(item,i){
-                item.orderBy = i;
-            });
-        }
+
 
         $rootScope.$on('file.upload.progress',function(e,file,progress){//monitor file progress
 
@@ -282,19 +252,73 @@
             //$rootScope.$broadcast('file.upload.startUpload',files);//could be bound on a button
         });
 
+        vm.changeState = function(state){
+            console.log(state)
+        }
+
+
+
+    }
+})();
+(function() {
+    angular.module('mcms.pages.page')
+        .directive('generalInformation', generalInformation);
+
+    generalInformation.$inject = ['pagesConfig'];
+    generalInformationController.$inject = ['pages.pageService','$scope','$rootScope'
+        ,'pagesConfig','$timeout','configuration','lodashFactory'];
+
+
+    function generalInformation(Config) {
+
+        return {
+            templateUrl: Config.appUrl + "Components/editItem/generalInformation.directive.html",
+            controller: generalInformationController,
+            require: ['^editPage'],
+            scope: {},
+            restrict : 'E',
+            link : generalInformationLink,
+            controllerAs: 'VM'
+        };
+
+    }
+
+    function generalInformationLink(scope, elem, attrs, editPageController){
+
+    }
+
+    function generalInformationController(Page,$scope,$rootScope,Config,$timeout,BaseConfig,lo){
+        var vm = this;
+        vm.redactorConfig = Config.redactor;
+        var thumb = {
+                copies : {
+                    thumb : {}
+                }
+            },
+            mediaFiles = {
+                images : [],
+                documents : []
+            };
+        vm.categories = Page.Categories;
+        vm.uploadOptions = BaseConfig.fileTypes.image;
+
+        $rootScope.$on('page.loaded',function(event,page){
+            vm.Page = page;
+            vm.uploadConfig = {
+                url : Config.apiUrl + 'uploadThumb',
+                fields : {
+                    id : page._id
+                }
+            };
+        });
+
+
         vm.onUploadDone = function(file,response){//handle the after upload shit
             if (!vm.Page.thumb){
                 vm.Page.thumb = thumb;
             }
 
             vm.Page.thumb = response;
-        };
-
-        vm.onUploadMultiDone = function(file,response){//handle the after upload shit
-            if (!vm.Page.mediaFiles){
-                vm.Page.mediaFiles = mediaFiles;
-            }
-            vm.Page.mediaFiles.images.push(lo.merge({id : response.id},response.copies));
         };
 
         vm.categoriesChange = function(item){
@@ -321,9 +345,98 @@
                         vm.success = false;
                     },5000);
                 });
-        }
+        };
+
     }
+
+
 })();
+(function() {
+    angular.module('mcms.pages.page')
+        .directive('mediaFiles', mediaFiles);
+
+    mediaFiles.$inject = ['pagesConfig'];
+    mediaFilesController.$inject = ['pages.pageService','$scope','$rootScope'
+        ,'pagesConfig','$timeout','configuration','lodashFactory'];
+
+
+    function mediaFiles(Config) {
+
+        return {
+            templateUrl: Config.appUrl + "Components/editItem/mediaFiles.directive.html",
+            controller: mediaFilesController,
+            require: ['^editPage'],
+            scope: {},
+            restrict : 'E',
+            link : mediaFilesLink,
+            controllerAs: 'VM'
+        };
+
+    }
+
+    function mediaFilesLink(scope, elem, attrs, editPageController){
+
+    }
+
+    function mediaFilesController(Page,$scope,$rootScope,Config,$timeout,BaseConfig,lo){
+        var vm = this;
+
+
+        $rootScope.$on('page.loaded',function(event,page){
+            vm.Page = page;
+            vm.uploadConfigMulti = {
+                url : Config.apiUrl + 'uploadImage',
+                fields : {
+                    id : page._id
+                }
+            };
+        });
+
+        vm.sortableOptions = {
+            containment: '#sortable-container',
+            orderChanged: function(event) {
+                recalculateOrderBy(vm.Page.mediaFiles.images);
+            }
+        };
+
+        vm.onUploadDone = function(file,response){//handle the after upload shit
+            if (!vm.Page.thumb){
+                vm.Page.thumb = thumb;
+            }
+
+            vm.Page.thumb = response;
+        };
+
+
+        vm.savePage = function(){
+            Page.save(vm.Page)
+                .then(function (res) {
+                    vm.success = true;
+                    $timeout(function(){
+                        vm.success = false;
+                    },5000);
+                });
+        };
+
+
+        vm.onUploadMultiDone = function(file,response){//handle the after upload shit
+            if (!vm.Page.mediaFiles){
+                vm.Page.mediaFiles = mediaFiles;
+            }
+            vm.Page.mediaFiles.images.push(lo.merge({id : response.id},response.copies));
+        };
+
+    }
+
+    function recalculateOrderBy(arr){
+        angular.forEach(arr,function(item,i){
+            item.orderBy = i;
+        });
+    }
+
+
+})();
+
 (function(){
     angular.module('mcms.pages')
         .controller('editPageCtrl',editPageCtrl);
