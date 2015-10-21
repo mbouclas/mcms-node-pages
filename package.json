@@ -1,7 +1,7 @@
 {
   "name": "mcms-node-pages",
   "description": "Content pages support for mcms-node",
-  "version": "0.0.7",
+  "version": "0.0.10",
   "license": "MIT",
   "author": {
     "name": "Michael Bouclas",
@@ -13,7 +13,7 @@
     "del": "^1.1.1",
     "fs-extra": "^0.16.5",
     "lodash": "^3.10.0",
-    "mcms-node-eager-loader": "0.0.10",
+    "mcms-node-eager-loader": "0.0.11",
     "mcms-node-named-routes": "0.0.5",
     "mongoose-materialized": "^0.1.8",
     "multer": "^0.1.8",

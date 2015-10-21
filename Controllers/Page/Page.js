@@ -39,7 +39,10 @@ module.exports = (function(App,Package){
         var page = parseInt(req.params.page) || 1;
         var limit = 12;//move it to options file
         var permalink = req.body.permalink || null;
-        pageServices.find({permalink : permalink},{with : ['countItems'],page:page,limit : limit},function(err,result){
+        if (!req.body.filters){
+            req.body.filters = {};
+        }
+        pageServices.find({permalink : permalink},{with : ['countItems'],page:page,limit : limit,filters : req.body.filters},function(err,result){
 
 
             if (err){

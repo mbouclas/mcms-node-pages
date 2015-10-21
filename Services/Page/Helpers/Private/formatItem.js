@@ -28,7 +28,7 @@ module.exports = (function(App,Connection,Package){
 
        var page = {
            title : data.title,
-           permalink : slug(data.title,{lower: true}),
+           permalink : data.permalink || slug(data.title,{lower: true}),
            description : data.description || '',
            description_long : data.description_long || '',
            active : data.active || false,

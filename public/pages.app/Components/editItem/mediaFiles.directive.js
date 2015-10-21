@@ -27,10 +27,17 @@
 
     function mediaFilesController(Page,$scope,$rootScope,Config,$timeout,BaseConfig,lo){
         var vm = this;
-
+        $rootScope.$broadcast('module.loaded','mediaFiles');
 
         $rootScope.$on('page.loaded',function(event,page){
             vm.Page = page;
+            vm.uploadConfig = {
+                url : Config.apiUrl + 'uploadThumb',
+                fields : {
+                    id : page._id
+                }
+            };
+
             vm.uploadConfigMulti = {
                 url : Config.apiUrl + 'uploadImage',
                 fields : {
@@ -53,7 +60,6 @@
 
             vm.Page.thumb = response;
         };
-
 
         vm.savePage = function(){
             Page.save(vm.Page)

@@ -2,29 +2,29 @@
 <div alert-message="VM.success">Saved...</div>
 
 	<legend>{{ VM.Page.title || 'New page' }}</legend>
-    <tabs>
-        <tab-button target="#panel_tab2_example1" state="general"><i class="green fa fa-home"></i> General</tab-button>
-        <tab-button target="#panel_tab2_example2" state="mediaFiles">Media Files</tab-button>
-        <tab-button target="#panel_tab2_example3" state="related">Related</tab-button>
-    </tabs>
-    <div class="tabbable">
-        <ul class="nav nav-tabs tab-bricky" id="myTab">
-            <tab-button target="#panel_tab2_example1" state="general"><i class="green fa fa-home"></i> General</tab-button>
-            <tab-button target="#panel_tab2_example2" state="mediaFiles">Media Files</tab-button>
-            <tab-button target="#panel_tab2_example3" state="related">Related</tab-button>
+
+    <mcms-tabs class="tabbable" id="editPage">
+        <ul class="nav nav-tabs tab-bricky" id="myTabs">
+            <tab-button state="general"><i class="green fa fa-home"></i> General</tab-button>
+            <tab-button state="mediaFiles">Media Files</tab-button>
+            <tab-button state="related">Related</tab-button>
         </ul>
+
+    </mcms-tabs>
+    <div class="tabbable">
+
         <div class="tab-content">
-            <div id="panel_tab2_example1" class="tab-pane active">
+            <div id="general" class="tab-pane active">
                 <general-information></general-information>
             </div><!-- END TAB -->
-            <div id="panel_tab2_example2" class="tab-pane">
+            <div id="mediaFiles" class="tab-pane">
                 <media-files></media-files>
             </div><!-- END TAB -->
-            <div id="panel_tab2_example3" class="tab-pane">
+            <div id="related" class="tab-pane">
                 <related-items></related-items>
             </div><!-- END TAB -->
 
         </div>
     </div>
-
+    <button type="submit" class="btn btn-success btn-block btn-lg">Save</button>
 </form>

@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('mcms.pages', [
-        'ngRoute',
+        'mcms.pages.configuration',
         'mcms.pages.categories',
         'mcms.pages.page'
     ])
@@ -25,13 +25,14 @@
                 templateUrl: configuration.appUrl + 'Pages/editPage.html',
                 controller: 'editPageCtrl',
                 controllerAs: 'VM',
-                name : 'edit-page'
+                name : 'edit-page',
+                reloadOnSearch : false
             });
     }
 
     function pagesRun(pageService,$rootScope,$location,$route){
         $rootScope.$on('$routeChangeStart', function(e, next, current) {
-            if (!pageService.loaded){
+            if (!pageService.loaded && !pageService.loading){
                 e.preventDefault();//pause until init
                 pageService.init().then(function(res){
                     $route.reload();//reload the route
@@ -45,7 +46,7 @@
 
 (function(){
     'use strict';
-    var core = angular.module('mcms.pages');
+
     var assetsUrl = '/assets/',
         appUrl = '/pages.app/',
         componentsUrl = appUrl + 'components/';
@@ -65,8 +66,12 @@
         }
     };
 
-    core.value('pagesConfig', config);
-    core.constant('pagesConfiguration',config);
+/*    core.value('pagesConfig', config);
+    core.constant('pagesConfiguration',config);*/
+
+    angular.module('mcms.pages.configuration',[])
+        .constant('pagesConfiguration',config)
+        .value('pagesConfig',config);
 })();
 
 (function(){
@@ -76,17 +81,47 @@
     pagesCtrl.$inject = ['$rootScope','logger','pageTitle','pages.pageService','$timeout'];
 
     function pagesCtrl($rootScope,logger,pageTitle,pageService,$timeout){
-        var vm = this;
+        var vm = this,
+            timer = false;
+        vm.filters = {
+            active : {
+                type : 'equals'
+            },
+            title : {
+                type : 'like'
+            },
+            categories: {
+                type : 'in'
+            }
+        };
 
-
-
-        pageService.getPages()
-            .then(function(pages){
-                vm.pages = pages.items;
-                vm.itemCount = pages.itemCount;
-                vm.pagination = pages.pagination;
-                console.log(pages)
+        changePage().then(function(){
+            vm.categories = pageService.Categories;
         });
+
+        vm.filterItems = function(){
+            if (timer){
+                $timeout.cancel(timer);
+            }
+
+            timer = $timeout(function(){
+                changePage(1);//reset page
+            },500);
+        };
+
+        vm.changePage = function(page){
+            changePage(page);
+        };
+
+        function changePage(page){
+            return pageService.getPages({filters : vm.filters,page : page || 1 })
+                .then(function(pages){
+                    vm.pages = pages.items;
+                    vm.itemCount = pages.itemCount;
+                    vm.pagination = pages.pagination;
+                });
+        }
+
 
         pageTitle.set('Pages');
 
@@ -169,6 +204,7 @@
 
         function init(){
             var _this = this;
+            this.loading = true;
             return dataService.init().then(function(res){
                 PageService.Categories = res.categories;
                 for (var i in PageService.Categories){
@@ -178,6 +214,7 @@
                 $rootScope.$broadcast('pages.init.done');
                 $rootScope.pagesAppDone = true;
                 _this.loaded = true;
+                _this.loading = false;
                 return res;
             });
         }
@@ -229,17 +266,47 @@
 
     function editPageController(Page,$timeout,Config,$routeParams,$rootScope,lo,BaseConfig){
         var vm = this;
+        vm.Page = {
+            active: false,
+            categories: [],
+            thumb: {},
+            mediaFiles: {
+                images: [],
+                documents: [],
+                videos: []
+            },
+            related: [],
+            settings: {}
+        };
 
+        var modulesToWaitFor = [
+                'mediaFiles'
+            ],
+            modulesLoaded = 0;
 
+        $rootScope.$on('module.loaded', function(e,module) {
+            //do your will
+            if (modulesToWaitFor.indexOf(module) != -1){
+                modulesLoaded++;
+            }
 
-        if ($routeParams.id){
-            Page.get($routeParams.id).then(function(page){
+            if (modulesLoaded == modulesToWaitFor.length){
+                allDone();
+            }
+        });
 
-                $rootScope.$broadcast('page.loaded',page);
+        function allDone(){
+            if ($routeParams.id != 'new'){
+                Page.get($routeParams.id).then(function(page){
 
-                vm.Page = page;
+                    $rootScope.$broadcast('page.loaded',page);
 
-            });
+                    vm.Page = page;
+
+                });
+            } else {//new product
+                $rootScope.$broadcast('page.loaded',vm.Page);
+            }
         }
 
 
@@ -254,9 +321,18 @@
 
         vm.changeState = function(state){
             console.log(state)
-        }
+        };
 
+        vm.savePage = function(){
 
+            Page.save(vm.Page)
+                .then(function (res) {
+                    vm.success = true;
+                    $timeout(function(){
+                        vm.success = false;
+                    },5000);
+                });
+        };
 
     }
 })();
@@ -280,7 +356,6 @@
             link : generalInformationLink,
             controllerAs: 'VM'
         };
-
     }
 
     function generalInformationLink(scope, elem, attrs, editPageController){
@@ -337,15 +412,7 @@
             vm.Page.categories.splice(lo.findIndex(vm.Page.categories,{id : category.id}),1);
         };
 
-        vm.savePage = function(){
-            Page.save(vm.Page)
-                .then(function (res) {
-                    vm.success = true;
-                    $timeout(function(){
-                        vm.success = false;
-                    },5000);
-                });
-        };
+
 
     }
 
@@ -380,10 +447,17 @@
 
     function mediaFilesController(Page,$scope,$rootScope,Config,$timeout,BaseConfig,lo){
         var vm = this;
-
+        $rootScope.$broadcast('module.loaded','mediaFiles');
 
         $rootScope.$on('page.loaded',function(event,page){
             vm.Page = page;
+            vm.uploadConfig = {
+                url : Config.apiUrl + 'uploadThumb',
+                fields : {
+                    id : page._id
+                }
+            };
+
             vm.uploadConfigMulti = {
                 url : Config.apiUrl + 'uploadImage',
                 fields : {
@@ -406,7 +480,6 @@
 
             vm.Page.thumb = response;
         };
-
 
         vm.savePage = function(){
             Page.save(vm.Page)

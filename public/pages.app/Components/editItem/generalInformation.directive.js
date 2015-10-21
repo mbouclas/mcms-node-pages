@@ -18,7 +18,6 @@
             link : generalInformationLink,
             controllerAs: 'VM'
         };
-
     }
 
     function generalInformationLink(scope, elem, attrs, editPageController){
@@ -75,15 +74,7 @@
             vm.Page.categories.splice(lo.findIndex(vm.Page.categories,{id : category.id}),1);
         };
 
-        vm.savePage = function(){
-            Page.save(vm.Page)
-                .then(function (res) {
-                    vm.success = true;
-                    $timeout(function(){
-                        vm.success = false;
-                    },5000);
-                });
-        };
+
 
     }
 

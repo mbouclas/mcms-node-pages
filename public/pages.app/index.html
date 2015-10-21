@@ -5,6 +5,19 @@
         <th>Dated added</th>
         <th>Status</th>
     </tr>
+    <tr>
+        <th><input type="text" ng-model="VM.filters.title.value" placeholder="title" ng-change="VM.filterItems()" class="form-control"></th>
+        <th>
+            <recursive-select ng-model="VM.filters.categories.value"
+                              settings="{label:'category',value:'id',defaultOption:'Select one'}" tree="VM.categories"
+                              ng-change="VM.filterItems()"
+                              class="form-control"></recursive-select>
+        </th>
+        <th></th>
+        <th><select-box ng-model="VM.filters.active.value" class="form-control" ng-change="VM.filterItems()">
+            <option value="">Select one</option>
+        </select-box></th>
+    </tr>
     <tr ng-repeat="page in VM.pages">
         <td>
             <a href="#/pages/edit/{{ page._id }}" ng-bind-html="page.title"></a>
@@ -21,3 +34,4 @@
 </table>
 
 
+<paginate ng-change="VM.changePage(page)" ng-model="VM.pagination"></paginate>

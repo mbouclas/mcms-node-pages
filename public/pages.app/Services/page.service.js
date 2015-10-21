@@ -21,6 +21,7 @@
 
         function init(){
             var _this = this;
+            this.loading = true;
             return dataService.init().then(function(res){
                 PageService.Categories = res.categories;
                 for (var i in PageService.Categories){
@@ -30,6 +31,7 @@
                 $rootScope.$broadcast('pages.init.done');
                 $rootScope.pagesAppDone = true;
                 _this.loaded = true;
+                _this.loading = false;
                 return res;
             });
         }

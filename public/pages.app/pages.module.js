@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('mcms.pages', [
-        'ngRoute',
+        'mcms.pages.configuration',
         'mcms.pages.categories',
         'mcms.pages.page'
     ])
@@ -25,13 +25,14 @@
                 templateUrl: configuration.appUrl + 'Pages/editPage.html',
                 controller: 'editPageCtrl',
                 controllerAs: 'VM',
-                name : 'edit-page'
+                name : 'edit-page',
+                reloadOnSearch : false
             });
     }
 
     function pagesRun(pageService,$rootScope,$location,$route){
         $rootScope.$on('$routeChangeStart', function(e, next, current) {
-            if (!pageService.loaded){
+            if (!pageService.loaded && !pageService.loading){
                 e.preventDefault();//pause until init
                 pageService.init().then(function(res){
                     $route.reload();//reload the route

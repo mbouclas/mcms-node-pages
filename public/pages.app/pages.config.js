@@ -1,6 +1,6 @@
 (function(){
     'use strict';
-    var core = angular.module('mcms.pages');
+
     var assetsUrl = '/assets/',
         appUrl = '/pages.app/',
         componentsUrl = appUrl + 'components/';
@@ -20,6 +20,10 @@
         }
     };
 
-    core.value('pagesConfig', config);
-    core.constant('pagesConfiguration',config);
+/*    core.value('pagesConfig', config);
+    core.constant('pagesConfiguration',config);*/
+
+    angular.module('mcms.pages.configuration',[])
+        .constant('pagesConfiguration',config)
+        .value('pagesConfig',config);
 })();

@@ -120,9 +120,19 @@ module.exports = (function(App,Connection,Package,privateMethods){
         }
 
 
-
+        if (filters && filters.categories){
+            filters.categories.value = App.Helpers.MongoDB.idToObjId(filters.categories.value);
+        }
 
         var searchFor = App.Helpers.MongoDB.setupFilters(filters);
+
+        lo.forEach(searchFor,function(value,key){
+            var q = {};
+            q[key] = value;
+            tmpQuery = {'$match': q};
+            Query.push(tmpQuery);
+            CommonAggregateQueries.push(tmpQuery);
+        });
 
 
         filters = searchFor;
